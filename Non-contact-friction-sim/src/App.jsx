@@ -207,6 +207,77 @@ function App() {
         {/* Graph */}
         <div style={{ marginTop: "40px" }}>
           <Line data={data} options={options} />
+          <div
+            style={{
+              marginTop: "30px",
+              padding: "20px",
+              borderRadius: "15px",
+              background: "rgba(255,255,255,0.05)",
+              backdropFilter: "blur(8px)",
+            }}
+          >
+            {mode === "drag" && (
+              <>
+                <h3 style={{ color: "cyan" }}>Fluid Drag (v² Relationship)</h3>
+                <p>
+                  As velocity increases, drag force increases quadratically.
+                  This means doubling the velocity results in four times the
+                  resistance.
+                </p>
+                <p>
+                  The smooth upward curve shows how resistance grows rapidly at
+                  higher speeds due to increased particle collisions.
+                </p>
+              </>
+            )}
+
+            {mode === "magnetic" && (
+              <>
+                <h3 style={{ color: "purple" }}>
+                  Magnetic Non-Contact Friction
+                </h3>
+                <p>
+                  This model represents friction without physical contact. The
+                  force varies with distance due to interactions between
+                  magnetic domains.
+                </p>
+                <p>
+                  The wave-like pattern shows peaks and dips, while the overall
+                  decrease represents weakening interaction as distance
+                  increases.
+                </p>
+                <p style={{marginTop:"20px"}}>
+                  The magnetic friction curve exhibits spikes due to the
+                  oscillatory nature of the sine component in the equation,
+                  combined with an exponential decay factor. The sine term
+                  causes the force to fluctuate, producing periodic peaks and
+                  dips that represent variations in magnetic domain interactions
+                  as distance changes. At smaller distances, the exponential
+                  decay has minimal effect, allowing the sine function to
+                  produce larger spikes. As distance increases, the exponential
+                  term gradually reduces the overall magnitude of the force,
+                  causing the spikes to diminish over time. This results in a
+                  wave-like pattern with decreasing amplitude, reflecting how
+                  magnetic interactions can vary non-linearly while weakening
+                  with increasing separation.
+                </p>
+              </>
+            )}
+
+            {mode === "compare" && (
+              <>
+                <h3 style={{ color: "cyan" }}>Comparison Insight</h3>
+                <p>
+                  The cyan curve (drag) increases smoothly with velocity, while
+                  the purple curve (magnetic) fluctuates with distance.
+                </p>
+                <p>
+                  This highlights how different physical mechanisms produce very
+                  different friction behaviors, even without direct contact.
+                </p>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
