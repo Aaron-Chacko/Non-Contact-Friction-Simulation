@@ -4,7 +4,7 @@ A simple physics-based simulation that models non-contact friction (drag force) 
 
 ---
 
-## 📐 Equation Used
+## Equation Used
 
 F = k · v²
 
@@ -31,9 +31,3 @@ This results in a rapid increase in resistance (drag force).
 ---
 
 
-
-## 📈 Future Improvements
-
-- Add real drag equation parameters (density, area, drag coefficient)
-- Graph visualization of velocity vs friction
-- More realistic simulation controls
