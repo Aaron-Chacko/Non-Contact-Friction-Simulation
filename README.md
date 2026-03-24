@@ -58,5 +58,8 @@ This results in an oscillatory force that decays over distance.
 
 ---
 
+## Live Demo
+https://friction-sim.vercel.app/
+
 
 
