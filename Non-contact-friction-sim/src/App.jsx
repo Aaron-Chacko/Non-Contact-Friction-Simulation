@@ -1,121 +1,113 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from "react";
+import {
+  Chart as ChartJS,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+} from "chart.js";
+import { Line } from "react-chartjs-2";
+
+ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement);
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [velocity, setVelocity] = useState(0);
+  const [medium, setMedium] = useState("air");
+
+  const getK = () => {
+    if (medium === "air") return 0.5;
+    if (medium === "water") return 2;
+    return 0;
+  };
+
+  const getFriction = (v) => {
+    return getK() * v * v;
+  };
+
+  // Graph
+  const velocities = Array.from({ length: 11 }, (_, i) => i);
+  const frictionValues = velocities.map((v) => getFriction(v));
+
+  const data = {
+    labels: velocities,
+    datasets: [
+      {
+        label: "Friction vs Velocity",
+        data: frictionValues,
+        borderColor: "cyan",
+        backgroundColor: "cyan",
+        pointRadius: 0, // hide all default points
+      },
+      {
+        label: "Current Value",
+        data: velocities.map((v) => (v === velocity ? getFriction(v) : null)),
+        borderColor: "red",
+        backgroundColor: "red",
+        pointRadius: 6,
+        showLine: false, // only show dot
+      },
+    ],
+  };
+
+  const options = {
+    plugins: {
+      legend: {
+        labels: {
+          color: "white",
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: "white",
+        },
+        grid: {
+          color: "gray",
+        },
+      },
+      y: {
+        ticks: {
+          color: "white",
+        },
+        grid: {
+          color: "gray",
+        },
+      },
+    },
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div style={{ padding: "20px" }}>
+      <h1>Friction Simulator</h1>
 
-      <div className="ticks"></div>
+      <div>
+        <label>Velocity: {velocity}</label>
+        <input
+          type="range"
+          min="0"
+          max="10"
+          value={velocity}
+          onChange={(e) => setVelocity(Number(e.target.value))}
+        />
+      </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      <div>
+        <label>Medium:</label>
+        <select onChange={(e) => setMedium(e.target.value)}>
+          <option value="air">Air</option>
+          <option value="water">Water</option>
+          <option value="vacuum">Vacuum</option>
+        </select>
+      </div>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <h2>Friction Force: {getFriction(velocity)}</h2>
+
+      <div style={{ width: "500px", marginTop: "30px" }}>
+        <Line data={data} options={options} />
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
